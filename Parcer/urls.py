@@ -21,4 +21,7 @@ from Parcer import views
 urlpatterns = [
     url(r'^$', views.home, name='home'),
     url(r'^register/$', views.register, name='register'),
+    url(r'^login/$', views.login, name='login'),
+    url(r'^manage_group/group_add/(?P<group_id>.)/(?P<user_id>.)/$', views.groupadd, name='groupadd'),
+    url(r'^manage_group/group_del/(?P<group_id>.)/(?P<user_id>.)/$', views.groupdel, name='groupdel'),
 ]
