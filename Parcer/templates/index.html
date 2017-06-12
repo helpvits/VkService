@@ -6,11 +6,19 @@
 {% if username %}
     <a href="/logout/">Выйти: {{ username }}</a>
 
+    <form action="manage_group/group_add/{{ username }}" method="post">
+    {% csrf_token %}
+    {{ group_form }}
+    <input type="submit" value="Добавить группу">
+    </form>
+
     <div>
         {% for group in groups %}
             group
         {% endfor %}
     </div>
+
+
 {% else %}
     <a href="/login/">Войти</a><br>
     <a href="/register/">Зареистрироваться</a>

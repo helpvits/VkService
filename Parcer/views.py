@@ -1,16 +1,20 @@
 from django.shortcuts import render, redirect, render_to_response
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import auth
+from Parcer.forms import GroupForm
 from Parcer.models import GroupsList, SearchStory, DeltaParse
 # Create your views here.
 from django.template.context_processors import csrf
 
 
 def home(request):
+    group_form = GroupForm
     try:
         args ={}
+        args.update(csrf(request))
         args['username'] = auth.get_user().username
         args['groups'] = GroupsList.objects.filter(author= args['username'])
+        args['group_form'] = group_form
     except:
         args = {}
     return render_to_response('index.html', args)
@@ -35,7 +39,7 @@ def login(request):
     return None
 
 
-def groupadd(request):
+def groupadd(request, username):
     return None
 
 
