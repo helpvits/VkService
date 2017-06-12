@@ -6,7 +6,8 @@ from django.template.context_processors import csrf
 
 
 def home(request):
-    return render_to_response('base.html')
+    username = auth.get_user().username
+    return render_to_response('index.html', {'username': username})
 
 
 def register(request):

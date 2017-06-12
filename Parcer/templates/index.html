@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block data %}
+
+<div id="auth">
+{% if username %}
+    <a href="/logout/">Выйти: {{ username }}</a>
+{% else %}
+    <a href="/login/">Войти</a><br>
+    <a href="/register/">Зареистрироваться</a>
+{% endif %}
+</div>
+
+{% endblock %}
