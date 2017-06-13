@@ -1,12 +1,11 @@
 {% extends 'base.html' %}
 
 {% block data %}
-
 <div id="auth">
 {% if username %}
     <a href="/logout/">Выйти: {{ username }}</a>
 
-    <form action="manage_group/group_add/{{ username }}" method="post">
+    <form action="manage_group/group_add/{{ username }}/" method="post">
     {% csrf_token %}
     {{ group_form }}
     <input type="submit" value="Добавить группу">

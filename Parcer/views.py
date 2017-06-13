@@ -8,11 +8,12 @@ from django.template.context_processors import csrf
 
 def home(request):
     group_form = GroupForm
+    args = {}
     try:
-        args ={}
         args.update(csrf(request))
-        args['username'] = auth.get_user().username
-        args['groups'] = GroupsList.objects.filter(author= args['username'])
+        args['username'] = auth.get_user(request).username
+        user = User.objects.get(username=args['username'])
+        args['groups'] = GroupsList.objects.filter(author=user.id)
         args['group_form'] = group_form
     except:
         args = {}
@@ -52,17 +53,18 @@ def login(request):
 
 
 def logout(request):
-    auth.logout()
+    auth.logout(request)
     return redirect('/')
 
 
 def groupadd(request, username):
     if request.POST:
         form = GroupForm(request.POST)
-        if form.is_valid():
-            group = form.save(commit=False)
-            group.author = User.objects.get(username=username)
-            form.save()
+        group = form.save(commit=False)
+        user = User.objects.get(username=username)
+        group.author = user.id
+        group.save()
+        form.save_m2m()
     return redirect('/')
 
 
