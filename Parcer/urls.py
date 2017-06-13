@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^$', views.home, name='home'),
     url(r'^register/$', views.register, name='register'),
     url(r'^login/$', views.login, name='login'),
+    url(r'^logout/$', views.logout, name='logout'),
     url(r'^manage_group/group_add/(?P<username>.)/$', views.groupadd, name='groupadd'),
     url(r'^manage_group/group_del/(?P<group_id>.)/(?P<user_id>.)/$', views.groupdel, name='groupdel'),
 ]
