@@ -57,7 +57,7 @@ def logout(request):
     return redirect('/')
 
 
-def groupadd(request, username):
+def group_add(request, username):
     if request.POST:
         user = User.objects.get(username=username)
         form = GroupForm(request.POST)
@@ -76,7 +76,13 @@ def groupadd(request, username):
     return redirect('/')
 
 
-def groupdel(request):
-    return None
+def group_del(request, username, group_id):
+    try:
+        group = GroupsList.objects.get(link=group_id)
+        user = User.objects.get(username=username)
+        group.author.remove(user.id)
+    except:
+        redirect('/')
+    return redirect('/')
 
 

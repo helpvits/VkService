@@ -10,6 +10,9 @@ class GroupsList(models.Model):
         verbose_name = 'Список групп'
         verbose_name_plural = 'Список групп'
 
+    def __str__(self):
+        return self.link
+
 class SearchStory(models.Model):
     group_id = models.ForeignKey(GroupsList)
     parsing_date = models.DateTimeField()
@@ -19,6 +22,9 @@ class SearchStory(models.Model):
         verbose_name = 'История проверок'
         verbose_name_plural = 'История проверок'
 
+    def __str__(self):
+        return self.group_id
+
 
 class DeltaParse(models.Model):
     group_id = models.ForeignKey(GroupsList)
@@ -27,4 +33,7 @@ class DeltaParse(models.Model):
     class Meta:
         verbose_name = 'Дельты'
         verbose_name_plural = 'Дельты'
+
+    def __str__(self):
+        return self.group_id
 

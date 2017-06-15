@@ -13,7 +13,16 @@
 
     <div>
         {% for group in groups %}
-            group
+            <table>
+            <tr>
+                 <td>
+                     <a href="/manage_group/group_del/{{group.link}}/{{ username }}/">x</a>
+                 </td>
+                 <td>
+                     {{group.link}}
+                 </td>
+             </tr>
+            </table>
         {% endfor %}
     </div>
 
