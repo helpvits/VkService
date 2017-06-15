@@ -4,6 +4,8 @@ from django.contrib import auth
 from Parcer.forms import GroupForm
 from Parcer.models import GroupsList, SearchStory, DeltaParse, User
 from django.template.context_processors import csrf
+from Parcer.GroupParce import get_api, get_grop_info, insert_group_info
+
 
 
 def home(request):
@@ -63,14 +65,21 @@ def group_add(request, username):
         form = GroupForm(request.POST)
         input_group = form.save(commit=False)
         group_link = input_group.link
-        try:
-            group = GroupsList.objects.get(link=group_link)
-            group.author.add(user.id)
-        except:
-            input_group = form.save()
-            group_link = input_group.link
-            group = GroupsList.objects.get(link=group_link)
-            group.author.add(user.id)
+        group_info = get_grop_info(input_group.link, get_api())
+        if group_info['count'] < 0:
+            err = 'No group info'
+        elif group_info['count'] > 10000:
+            err = 'So many people'
+        else:
+            try:
+                group = GroupsList.objects.get(link=group_link)
+                group.author.add(user.id)
+            except:
+                input_group = form.save()
+                group_link = input_group.link
+                group = GroupsList.objects.get(link=group_link)
+                group.author.add(user.id)
+                insert_group_info(input_group.link, group_info['users'])
         #group.save()
         #form.save_m2m()
     return redirect('/')
