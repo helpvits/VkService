@@ -59,12 +59,20 @@ def logout(request):
 
 def groupadd(request, username):
     if request.POST:
-        form = GroupForm(request.POST)
-        group = form.save(commit=False)
         user = User.objects.get(username=username)
-        group.author = user.id
-        group.save()
-        form.save_m2m()
+        form = GroupForm(request.POST)
+        input_group = form.save(commit=False)
+        group_link = input_group.link
+        try:
+            group = GroupsList.objects.get(link=group_link)
+            group.author.add(user.id)
+        except:
+            input_group = form.save()
+            group_link = input_group.link
+            group = GroupsList.objects.get(link=group_link)
+            group.author.add(user.id)
+        #group.save()
+        #form.save_m2m()
     return redirect('/')
 
 
