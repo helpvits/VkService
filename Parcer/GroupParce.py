@@ -47,6 +47,10 @@ def insert_group_info(group, info):
         print(e)
 
 
+def make_delta(group_id):
+    pass
+
+
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "GroupParcer.settings")
     django.setup()

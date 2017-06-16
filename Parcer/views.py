@@ -74,6 +74,10 @@ def group_add(request, username):
         else:
             try:
                 group = GroupsList.objects.get(link=group_link)
+                try:
+                    group.author.add(user.id)
+                except Exception as e:
+                    print(e)
                 insert_group_info(input_group.link, group_info)
             except:
                 input_group = form.save()
@@ -94,3 +98,5 @@ def group_del(request, username, group_id):
     return redirect('/')
 
 
+def make_delta(request):
+    return None

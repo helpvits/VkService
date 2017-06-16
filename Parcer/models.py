@@ -29,7 +29,9 @@ class SearchStory(models.Model):
 
 class DeltaParse(models.Model):
     group_id = models.ForeignKey(GroupsList)
-    delta_date = models.DateTimeField()
+    coming = models.TextField(blank=True)
+    leavers = models.TextField( blank=True)
+    date = models.TextField(blank=True)
 
     class Meta:
         verbose_name = 'Дельты'
