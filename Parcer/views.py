@@ -7,7 +7,6 @@ from django.template.context_processors import csrf
 from Parcer.GroupParce import get_api, get_grop_info, insert_group_info
 
 
-
 def home(request):
     group_form = GroupForm
     args = {}
@@ -17,8 +16,8 @@ def home(request):
         user = User.objects.get(username=args['username'])
         args['groups'] = GroupsList.objects.filter(author=user.id)
         args['group_form'] = group_form
-    except:
-        args = {}
+    except Exception as e:
+        print(e)
     return render_to_response('index.html', args)
 
 
@@ -30,12 +29,14 @@ def register(request):
         newuser_form = UserCreationForm(request.POST)
         if newuser_form.is_valid():
             newuser_form.save()
-            newuser = auth.authenticate(username=newuser_form.cleaned_data['username'], password=newuser_form.cleaned_data['password2'])
-            auth.login(request, newuser)
+            new_user = auth.authenticate(username=newuser_form.cleaned_data['username'],
+                                        password=newuser_form.cleaned_data['password2'])
+            auth.login(request, new_user)
             return redirect('/')
         else:
             args['form'] = newuser_form
     return render_to_response('register.html', args)
+
 
 def login(request):
     args = {}
@@ -73,15 +74,13 @@ def group_add(request, username):
         else:
             try:
                 group = GroupsList.objects.get(link=group_link)
-                group.author.add(user.id)
+                insert_group_info(input_group.link, group_info)
             except:
                 input_group = form.save()
                 group_link = input_group.link
                 group = GroupsList.objects.get(link=group_link)
                 group.author.add(user.id)
-                insert_group_info(input_group.link, group_info['users'])
-        #group.save()
-        #form.save_m2m()
+                insert_group_info(input_group.link, group_info)
     return redirect('/')
 
 

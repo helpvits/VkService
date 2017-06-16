@@ -40,10 +40,9 @@ def get_grop_info(group, vk_api):
 
 def insert_group_info(group, info):
     try:
-        from Parcer.models import SearchStory
-        from django.utils.timezone import localtime, now
-        data = SearchStory(group_id=group, parsing_date=localtime(now()), users=info['users'])
-        data.save()
+        from Parcer.models import SearchStory, GroupsList
+        target_group = GroupsList.objects.get(link=group)
+        SearchStory.objects.create(group_id=target_group, users=info['users'], users_count=info['count'])
     except Exception as e:
         print(e)
 

@@ -4,7 +4,7 @@ from django.db import models
 # Create your models here.
 class GroupsList(models.Model):
     link = models.CharField(max_length=200, verbose_name='Сылка группы')
-    author = models.ManyToManyField(User, null=True, blank=True)
+    author = models.ManyToManyField(User, blank=True)
 
     class Meta:
         verbose_name = 'Список групп'
@@ -15,15 +15,16 @@ class GroupsList(models.Model):
 
 class SearchStory(models.Model):
     group_id = models.ForeignKey(GroupsList)
-    parsing_date = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
     users = models.TextField()
+    users_count = models.CharField(max_length=200, verbose_name='количество участников', null=True, blank=True)
 
     class Meta:
         verbose_name = 'История проверок'
         verbose_name_plural = 'История проверок'
 
     def __str__(self):
-        return self.group_id
+        return str(self.group_id)
 
 
 class DeltaParse(models.Model):
