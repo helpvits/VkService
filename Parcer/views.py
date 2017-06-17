@@ -67,11 +67,7 @@ def group_add(request, username):
         input_group = form.save(commit=False)
         group_link = input_group.link
         group_info = get_grop_info(input_group.link, get_api())
-        if group_info['count'] < 0:
-            err = 'No group info'
-        elif group_info['count'] > 10000:
-            err = 'So many people'
-        else:
+        if form.is_valid():
             try:
                 group = GroupsList.objects.get(link=group_link)
                 try:
@@ -85,7 +81,9 @@ def group_add(request, username):
                 group = GroupsList.objects.get(link=group_link)
                 group.author.add(user.id)
                 insert_group_info(input_group.link, group_info)
-    return redirect('/')
+        else:
+            form = GroupForm()
+    return render(request, 'index.html', {'form': form})
 
 
 def group_del(request, username, group_id):
