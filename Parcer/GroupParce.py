@@ -30,8 +30,8 @@ def get_api():
 def get_grop_info(group, vk_api):
     try:
         info = vk_api.groups.getMembers(group_id=group)
-        users = info['users']
-        count = info['count']
+        #users = info['users']
+        #count = info['count']
         return info
     except Exception as e:
         print(e)

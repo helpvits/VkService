@@ -1,3 +1,4 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, render_to_response
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import auth
@@ -64,10 +65,10 @@ def group_add(request, username):
     if request.POST:
         user = User.objects.get(username=username)
         form = GroupForm(request.POST)
-        input_group = form.save(commit=False)
-        group_link = input_group.link
-        group_info = get_grop_info(input_group.link, get_api())
         if form.is_valid():
+            input_group = form.save(commit=False)
+            group_link = input_group.link
+            group_info = get_grop_info(input_group.link, get_api())
             try:
                 group = GroupsList.objects.get(link=group_link)
                 try:
@@ -83,6 +84,7 @@ def group_add(request, username):
                 insert_group_info(input_group.link, group_info)
         else:
             form = GroupForm()
+            request.session.modified = True
     return render(request, 'index.html', {'form': form})
 
 
