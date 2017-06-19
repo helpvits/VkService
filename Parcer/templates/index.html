@@ -5,7 +5,7 @@
 
     <a href="/logout/">Выйти: {{ username }}</a>
 
-    <form action="manage_group/group_add/{{ username }}/" method="post">
+    <form name="group_form" action="manage_group/group_add/" method="post">
     {{ group_form.as_p }}
     <input type="submit" value="Добавить группу">
     {% csrf_token %}
@@ -16,7 +16,7 @@
             <table>
             <tr>
                  <td>
-                     <a href="/manage_group/group_del/{{group.link}}/{{ username }}/">x</a>
+                     <a href="/manage_group/group_del/{{group.link}}/">x</a>
                  </td>
                  <td>
                      {{group.link}}

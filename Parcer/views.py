@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, render_to_response
+from django.shortcuts import render, redirect, render_to_response, HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import auth
 from Parcer.forms import GroupForm
@@ -63,8 +63,10 @@ def logout(request):
     return redirect('/login/')
 
 
-def group_add(request, username):
+def group_add(request):
     if request.POST:
+        username = auth.get_user(request).username
+        args = {}
         user = User.objects.get(username=username)
         form = GroupForm(request.POST)
         if form.is_valid():
@@ -85,14 +87,15 @@ def group_add(request, username):
                 group.author.add(user.id)
                 insert_group_info(input_group.link, group_info)
         else:
-            args = {}
             args.update(csrf(request))
             args = get_usr_data(request, args)
-    return redirect('/', args)
+            return render(request, 'index.html', args)
+    return HttpResponseRedirect('/', args)
 
 
-def group_del(request, username, group_id):
+def group_del(request, group_id):
     try:
+        username = auth.get_user(request).username
         group = GroupsList.objects.get(link=group_id)
         user = User.objects.get(username=username)
         group.author.remove(user.id)

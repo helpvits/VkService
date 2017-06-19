@@ -22,8 +22,8 @@ urlpatterns = [
     url(r'^register/$', views.register, name='register'),
     url(r'^login/$', views.login, name='login'),
     url(r'^logout/$', views.logout, name='logout'),
-    url(r'^manage_group/group_add/(?P<username>[^/]+)/$', views.group_add, name='group_add'),
-    url(r'^manage_group/group_del/(?P<group_id>[^/]+)/(?P<username>[^/]+)/$', views.group_del, name='group_del'),
+    url(r'^manage_group/group_add/$', views.group_add, name='group_add'),
+    url(r'^manage_group/group_del/(?P<group_id>[^/]+)/$', views.group_del, name='group_del'),
     url(r'^manage_group/make_delta/(?P<group_id>[^/]+)/$', views.make_delta, name='group_add'),
     url(r'^$', views.home, name='home'),
 ]
