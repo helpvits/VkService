@@ -14,9 +14,12 @@ class GroupForm(ModelForm):
         info = get_grop_info(link, vk_api)
         if info['count']:
             if info['count'] < 0:
+                self.add_error('link', 'В группе нет участников')
                 raise ValidationError('В группе нет участников')
             elif info['count'] > 10000:
+                self.add_error('link', 'Слишком нмого участников >10000')
                 raise ValidationError('Слишком нмого участников >10000')
         else:
+            self.add_error('link', 'Проблема с получением данных')
             raise ValidationError('Проблема с получением данных')
         return self.cleaned_data

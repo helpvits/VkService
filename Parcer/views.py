@@ -5,20 +5,23 @@ from Parcer.forms import GroupForm
 from Parcer.models import GroupsList, SearchStory, DeltaParse, User
 from django.template.context_processors import csrf
 from Parcer.GroupParce import get_api, get_grop_info, insert_group_info
+from Parcer.utils import get_usr_data
 
 
 def home(request):
-    group_form = GroupForm
-    args = {}
     try:
-        args.update(csrf(request))
-        args['username'] = auth.get_user(request).username
-        user = User.objects.get(username=args['username'])
-        args['groups'] = GroupsList.objects.filter(author=user.id)
-        args['group_form'] = group_form
+        if auth.get_user(request).username:
+            args = {}
+            try:
+                args.update(csrf(request))
+                get_usr_data(request, args)
+                return render_to_response('index.html', args)
+            except Exception as e:
+                print(e)
+        else:
+            return redirect('/login/')
     except Exception as e:
         print(e)
-    return render_to_response('index.html', args)
 
 
 def register(request):
@@ -57,17 +60,17 @@ def login(request):
 
 def logout(request):
     auth.logout(request)
-    return redirect('/')
+    return redirect('/login/')
 
 
 def group_add(request, username):
     if request.POST:
         user = User.objects.get(username=username)
         form = GroupForm(request.POST)
-        input_group = form.save(commit=False)
-        group_link = input_group.link
-        group_info = get_grop_info(input_group.link, get_api())
         if form.is_valid():
+            input_group = form.save(commit=False)
+            group_link = input_group.link
+            group_info = get_grop_info(input_group.link, get_api())
             try:
                 group = GroupsList.objects.get(link=group_link)
                 try:
@@ -82,8 +85,10 @@ def group_add(request, username):
                 group.author.add(user.id)
                 insert_group_info(input_group.link, group_info)
         else:
-            form = GroupForm()
-    return render(request, 'index.html', {'form': form})
+            args = {}
+            args.update(csrf(request))
+            args = get_usr_data(request, args)
+    return redirect('/', args)
 
 
 def group_del(request, username, group_id):
